@@ -1,42 +1,50 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchData, addData, updateData, deleteData } from '../../api.js'; // Asegúrate de que las rutas sean correctas
+    import { fetchData, addData, updateData, deleteData } from '../../api.js';
 
-    let productos = [];
-    let showModal = false;
-    let isEditing = false;
-    let currentProduct = {};
+    let productos = []; // Lista de productos
+    let showModal = false; // Mostrar u ocultar el modal
+    let isEditing = false; // Indica si se está editando un producto para que lo muestre en el modal xd.
+    let currentProduct = {}; // Producto actual (para agregar/editar)
 
+    // Al cargar la página, obtenemos los productos
     onMount(async () => {
         productos = await fetchData();
     });
 
-    const openModal = (producto = {}) => {
-        currentProduct = { ...producto };
-        showModal = true;
-        isEditing = !!producto.id;
-    };
+    // Función para abrir el modal, ya sea para agregar o editar
+    function openModal(producto = {}) {
+        currentProduct = { ...producto }; // Copia del producto actual
+        showModal = true; // Mostrar modal
+        isEditing = !!producto.id; // para editar en base al ID y no lo agregue a la tabla como nuevo producto.
+    }
 
-    const closeModal = () => {
-        showModal = false;
-        currentProduct = {};
-    };
+    // Función para cerrar el modal y limpiar datos
+    function closeModal() {
+        showModal = false; // Ocultar modal
+        currentProduct = {}; // Limpiar producto actual
+    }
 
-    const handleSave = async () => {
+    // Guardar producto (agregar o editar)
+    async function handleSave() {
         if (isEditing) {
+            // Si estamos editando, actualizamos el producto
             await updateData(currentProduct);
         } else {
+            // Si no, agregamos un nuevo producto
             await addData(currentProduct);
         }
-        productos = await fetchData();
-        closeModal();
-    };
+        productos = await fetchData(); // Actualizamos la lista de productos
+        closeModal(); // Cerramos el modal
+    }
 
-    const handleDelete = async (id) => {
-        await deleteData(id);
-        productos = await fetchData();
-    };
+    // Eliminar producto
+    async function handleDelete(id) {
+        await deleteData(id); // Eliminamos el producto por ID
+        productos = await fetchData(); // Actualizamos la lista de productos
+    }
 </script>
+
 
 <style>
     /* Estilos para la tabla y el modal */
@@ -73,7 +81,7 @@
 
 <h1>Lista de Productos</h1>
 
-<button on:click={() => openModal()}>Añadir Producto</button>
+<button class="font-bold border-2 border-slate-200 rounded-md bg-emerald-200 p-2 my-2" on:click={() => openModal()}>Añadir Productos</button>
 
 <table>
     <thead>
@@ -82,7 +90,7 @@
             <th>Código</th>
             <th>Precio</th>
             <th>Cantidad</th>
-            <th>Acciones</th>
+            <th class="w-52">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -93,8 +101,10 @@
                 <td>{producto.precio}</td>
                 <td>{producto.cantidad}</td>
                 <td>
-                    <button on:click={() => openModal(producto)}>Editar</button>
-                    <button on:click={() => handleDelete(producto.id)}>Eliminar</button>
+                    <div class="table m-auto">
+                        <button class="mx-2 border-2 border-slate-200 rounded-md bg-emerald-200 p-2" on:click={() => openModal(producto)}>Editar</button>
+                        <button class="mx-2 border-2 border-slate-200 rounded-md bg-rose-400 p-2" on:click={() => handleDelete(producto.id)}>Eliminar</button>
+                    </div>
                 </td>
             </tr>
         {/each}
@@ -102,11 +112,13 @@
 </table>
 
 <div class="modal {showModal ? 'show' : ''}">
-    <h2>{isEditing ? 'Editar Producto' : 'Añadir Producto'}</h2>
-    <label>Nombre: <input bind:value={currentProduct.nombre} /></label><br>
-    <label>Código: <input bind:value={currentProduct.codigo} /></label><br>
-    <label>Precio: <input bind:value={currentProduct.precio} /></label><br>
-    <label>Cantidad: <input bind:value={currentProduct.cantidad} /></label><br>
-    <button on:click={handleSave}>{isEditing ? 'Actualizar' : 'Guardar'}</button>
-    <button on:click={closeModal}>Cancelar</button>
+    <h2 class="text-center font-bold">{isEditing ? 'Editar Producto' : 'Añadir Producto'}</h2>
+    <label class="grid"> <div class="font-bold">Nombre:</div> <input class="border-2 border-slate-200 rounded-md mb-2 cursive" bind:value={currentProduct.nombre} /></label>
+    <label class="grid"> <div class="font-bold">Código:</div> <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentProduct.codigo} /></label>
+    <label class="grid"> <div class="font-bold">Precio:</div> <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentProduct.precio} /></label>
+    <label class="grid"> <div class="font-bold">Cantidad:</div> <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentProduct.cantidad} /></label>
+    <div class="table m-auto">
+        <button class="mx-2 border-2 border-slate-200 rounded-md bg-emerald-200 p-2" on:click={handleSave}>{isEditing ? 'Actualizar' : 'Guardar'}</button>
+        <button class="mx-2 border-2 border-slate-200 rounded-md bg-rose-400 p-2" on:click={closeModal}>Cancelar</button>
+    </div>
 </div>
