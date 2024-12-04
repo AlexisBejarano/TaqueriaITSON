@@ -20,10 +20,12 @@
     });
 
     // Función para abrir el modal de edición de la taquería
-    function openModal() {
-        currentTaqueria = { ...taqueria }; // Resetear valores con los actuales
-        showModal = true;
-    }
+    // Función para abrir el modal de edición de la taquería
+function openModal() {
+    currentTaqueria = { ...taqueria }; // Resetear valores con los actuales
+    showModal = true; // Abrir el modal
+}
+
 
     // Función para cerrar el modal
     function closeModal() {
@@ -171,6 +173,19 @@
 </div>
 
 <!-- Modal para editar la taquería -->
+<div class="modal w-64 text-center {showModal ? 'show' : ''}">
+    <h2 class="font-bold">Editar Información de la Taquería</h2>
+    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.nombre} /></label>
+    <label>Teléfono: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.telefono} /></label>
+    <label>Email: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.email} /></label>
+    <label>Descripción: <textarea class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.descripcion}></textarea></label>
+    <div class="mt-4">
+        <button on:click={handleSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">Guardar</button>
+        <button on:click={closeModal} class="border-2 border-slate-200 rounded-md bg-rose-400 p-2">Cancelar</button>
+    </div>
+</div>
+ 
+
 <!-- Modal para editar taco -->
 <div class="modal w-64 text-center {showEditTacoModal ? 'show' : ''}">
     <h2 class="font-bold">Editar Taco</h2>
