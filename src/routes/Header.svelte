@@ -17,22 +17,16 @@
 		</svg>
 		<ul>
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/index' ? 'page' : undefined}>
 				<a href="/index">index</a>
 			</li>
-
-
-
 			<li aria-current={$page.url.pathname === '/productos' ? 'page' : undefined}>
 				<a href="/productos">productos</a>
+			</li>
+			<li aria-current={$page.url.pathname === '/ajustes' ? 'page' : undefined}>
+				<a href="/ajustes">Ajustes</a>
+			</li>
+			<li aria-current={$page.url.pathname === '/contacto' ? 'page' : undefined}>
+				<a href="/contacto">Contacto</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
