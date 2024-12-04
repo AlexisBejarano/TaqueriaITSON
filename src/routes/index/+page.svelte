@@ -104,12 +104,22 @@ function openModal() {
     }
 
     // Función para confirmar el ticket (guardar o enviar al servidor)
-    async function confirmTicket() {
-        // Aquí podrías agregar el ticket a la base de datos si es necesario
-        alert('Ticket confirmado. Total: ' + total);
-        selectedTacos = []; // Limpiar el ticket después de confirmar
-        calculateTotal(); // Reiniciar total
-    }
+async function confirmTicket() {
+    // Crear el mensaje del ticket con los productos seleccionados
+    let ticketDetails = "Detalles del Ticket:\n";
+    selectedTacos.forEach(taco => {
+        ticketDetails += `${taco.nombre} x ${taco.cantidad} - $${taco.precio * taco.cantidad}\n`;
+    });
+    ticketDetails += `\nTotal a pagar: $${total}`;
+    
+    // Mostrar la alerta con los detalles del ticket
+    alert(ticketDetails);
+    
+    // Limpiar el ticket después de confirmar
+    selectedTacos = []; 
+    calculateTotal(); // Reiniciar total
+}
+
 </script>
 
 <style>
