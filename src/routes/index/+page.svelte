@@ -3,12 +3,8 @@
     import { fetchTaqueriaData, updateTaqueriaData, fetchTacos, addTaco, updateTaco, deleteTaco } from '../../api.js';
 
     let taqueria = {}; // Datos de la taquería
-    let showModal = false; // Modal para editar taquería
-    let showEditTacoModal = false; // Modal para editar taco
     let currentTaqueria = {}; // Taquería actual para editar
     let tacos = []; // Lista de tacos
-    let newTaco = { nombre: '', precio: '', cantidad: 0 }; // Nuevo taco para agregar
-    let currentTaco = {}; // Taco actual para editar
     let selectedTacos = []; // Tacos seleccionados para la venta
     let total = 0; // Total a pagar
 
@@ -18,54 +14,6 @@
         currentTaqueria = { ...taqueria }; // Copiar datos para edición
         tacos = await fetchTacos();
     });
-
-    // Función para abrir el modal de edición de la taquería
-    // Función para abrir el modal de edición de la taquería
-function openModal() {
-    currentTaqueria = { ...taqueria }; // Resetear valores con los actuales
-    showModal = true; // Abrir el modal
-}
-
-
-    // Función para cerrar el modal
-    function closeModal() {
-        showModal = false;
-    }
-
-    // Función para guardar los cambios en la taquería
-    async function handleSave() {
-        await updateTaqueriaData(currentTaqueria);
-        taqueria = { ...currentTaqueria }; // Actualizar los datos mostrados
-        closeModal();
-    }
-
-    // Función para añadir un nuevo taco
-    async function handleAddTaco() {
-        await addTaco(newTaco);
-        tacos = await fetchTacos(); // Recargar la lista de tacos
-        newTaco = { nombre: '', precio: '', cantidad: 0 }; // Limpiar formulario
-    }
-
-    // Función para editar un taco
-    function openEditTacoModal(taco) {
-        currentTaco = { ...taco }; // Clonar los datos del taco
-        showEditTacoModal = true;  // Abrir el modal
-    }
-
-
-    // Función para guardar los cambios al editar un taco
-    async function handleEditTacoSave() {
-        await updateTaco(currentTaco); // Guardar cambios en el taco
-        tacos = await fetchTacos(); // Recargar los tacos
-        showEditTacoModal = false;  // Cerrar el modal
-    }
-
-
-    // Función para eliminar un taco
-    function handleDeleteTaco(id) {
-        deleteTaco(id);
-        tacos = tacos.filter(taco => taco.id !== id); // Eliminar taco localmente
-    }
 
     // Función para agregar tacos al ticket
     function addToTicket(taco) {
@@ -106,11 +54,11 @@ function openModal() {
     // Función para confirmar el ticket (guardar o enviar al servidor)
 async function confirmTicket() {
     // Crear el mensaje del ticket con los productos seleccionados
-    let ticketDetails = "Detalles del Ticket:\n";
+    let ticketDetails = `${taqueria.nombre} \n \n`+"Detalles de compra:\n";
     selectedTacos.forEach(taco => {
         ticketDetails += `${taco.nombre} x ${taco.cantidad} - $${taco.precio * taco.cantidad}\n`;
     });
-    ticketDetails += `\nTotal a pagar: $${total}`;
+    ticketDetails += `\nTotal a pagar: $${total} \n \n ${taqueria.telefono} \n ${taqueria.email} \n ¡¡Gracias por su compra!!`;
     
     // Mostrar la alerta con los detalles del ticket
     alert(ticketDetails);
@@ -171,7 +119,7 @@ async function confirmTicket() {
     }
 </style>
 
-<h1>Información de la Taquería</h1>
+<h1>Punto de venta {taqueria.nombre}</h1>
 
 <!-- Información de la taquería -->
 <div class="taqueria-info">
@@ -179,60 +127,20 @@ async function confirmTicket() {
     <p><strong>Teléfono:</strong> {taqueria.telefono}</p>
     <p><strong>Email:</strong> {taqueria.email}</p>
     <p><strong>Descripción:</strong> {taqueria.descripcion}</p>
-    <button on:click={openModal} class="font-bold border-2 border-slate-200 rounded-md bg-emerald-200 p-2 my-2">Editar Información</button>
 </div>
 
-<!-- Modal para editar la taquería -->
-<div class="modal w-64 text-center {showModal ? 'show' : ''}">
-    <h2 class="font-bold">Editar Información de la Taquería</h2>
-    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.nombre} /></label>
-    <label>Teléfono: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.telefono} /></label>
-    <label>Email: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.email} /></label>
-    <label>Descripción: <textarea class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaqueria.descripcion}></textarea></label>
-    <div class="mt-4">
-        <button on:click={handleSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">Guardar</button>
-        <button on:click={closeModal} class="border-2 border-slate-200 rounded-md bg-rose-400 p-2">Cancelar</button>
-    </div>
-</div>
- 
-
-<!-- Modal para editar taco -->
-<div class="modal w-64 text-center {showEditTacoModal ? 'show' : ''}">
-    <h2 class="font-bold">Editar Taco</h2>
-    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentTaco.nombre} /></label>
-    <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentTaco.precio} /></label>
-    <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentTaco.cantidad} /></label>
-    <div class="mt-4">
-        <button on:click={handleEditTacoSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">Guardar</button>
-        <button on:click={() => showEditTacoModal = false} class="border-2 border-slate-200 rounded-md bg-rose-400 p-2">Cancelar</button>
-    </div>
-</div>
-
-
-<h2>Punto de Venta</h2>
+<h2 class="mt-3 text-center font-bold">ARTICULOS</h2>
 
 <!-- Lista de tacos disponibles -->
-<h3>Tacos Disponibles</h3>
 <div class="caja-container">
     {#each tacos as taco}
         <div class="taco-item">
             <h3>{taco.nombre}</h3>
             <p>Precio: ${taco.precio}</p>
             <p>Cantidad: {taco.cantidad}</p>
-            <button on:click={() => addToTicket(taco)}>Agregar al Ticket</button>
-            <button on:click={() => openEditTacoModal(taco)}>Editar</button>
-            <button on:click={() => handleDeleteTaco(taco.id)}>Eliminar</button>
+            <button class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2 w-full" on:click={() => addToTicket(taco)}>Añadir</button>
         </div>
     {/each}
-</div>
-
-<!-- Botón para añadir un nuevo taco -->
-<h3>Agregar Nuevo Taco</h3>
-<div>
-    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={newTaco.nombre} /></label>
-    <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.precio} /></label>
-    <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.cantidad} /></label>
-    <button on:click={handleAddTaco}>Añadir Taco</button>
 </div>
 
 <!-- Lista del Ticket -->
