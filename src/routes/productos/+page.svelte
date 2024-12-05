@@ -4,8 +4,8 @@
 
     let productos = []; // Lista de productos
     let showModal = false; // Modal para productos nuevos
-    let showAddExistingModal = false; // Modal para productos existentes
-    let isEditing = false; // Indica si se está editando un producto
+    let modalProductosExist = false; // Modal para productos existentes
+    let indicProductoEdit = false; // Indica si se está editando un producto
     let currentProduct = {}; // Producto actual (para agregar/editar)
     let selectedProductId = null; // ID del producto seleccionado en la lista
     let cantidadAdicional = 0; // Cantidad adicional para productos existentes
@@ -20,7 +20,7 @@
     function openModal(producto = {}) {
         currentProduct = { ...producto }; // Copia del producto actual
         showModal = true;
-        isEditing = !!producto.id;
+        indicProductoEdit = !!producto.id;
     }
 
     // Función para abrir el modal para añadir productos existentes
@@ -28,13 +28,13 @@
         selectedProductId = null; // Resetear selección
         cantidadAdicional = 0; // Resetear cantidad
         precioAdicional = 0; // Resetear precio
-        showAddExistingModal = true; // Mostrar modal
+        modalProductosExist = true; // Mostrar modal
     }
 
     // Función para cerrar los modales
     function closeModal() {
         showModal = false;
-        showAddExistingModal = false;
+        modalProductosExist = false;
         currentProduct = {};
         selectedProductId = null;
         cantidadAdicional = 0;
@@ -43,7 +43,7 @@
 
     // Guardar producto (agregar o editar)
     async function handleSave() {
-        if (isEditing) {
+        if (indicProductoEdit) {
             await updateData(currentProduct);
         } else {
             await addData(currentProduct);
@@ -192,19 +192,19 @@
 
 <!-- Modal para agregar o editar productos -->
 <div class="modal w-64 text-center {showModal ? 'show' : ''}">
-    <h2 class="text-center font-bold">{isEditing ? 'Editar Producto' : 'Añadir Producto Nuevo'}</h2>
+    <h2 class="text-center font-bold">{indicProductoEdit ? 'Editar Producto' : 'Añadir Producto Nuevo'}</h2>
     <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentProduct.nombre} /></label>
     <label>Código: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={currentProduct.codigo} /></label>
     <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentProduct.precio} /></label>
     <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentProduct.cantidad} /></label>
     <div class="mt-4">
-        <button on:click={handleSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">{isEditing ? 'Actualizar' : 'Guardar'}</button>
+        <button on:click={handleSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">{indicProductoEdit ? 'Actualizar' : 'Guardar'}</button>
         <button on:click={closeModal} class="border-2 border-slate-200 rounded-md bg-rose-400 p-2">Cancelar</button>
     </div>
 </div>
 
 <!-- Modal para añadir cantidad y precio a productos existentes -->
-<div class="modal w-64 text-center {showAddExistingModal ? 'show' : ''}">
+<div class="modal w-64 text-center {modalProductosExist ? 'show' : ''}">
     <h2 class="font-bold mb-4">Añadir Producto Existente</h2>
     <label>
         Producto:

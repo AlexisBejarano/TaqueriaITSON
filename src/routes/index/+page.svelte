@@ -144,16 +144,21 @@ async function confirmTicket() {
 </div>
 
 <!-- Lista del Ticket -->
-<div class="selected-tacos">
-    <h3>Productos en el Ticket</h3>
+<div class="selected-tacos w-96 mx-auto">
+    <h3 class="text-center mb-2 font-bold">ARTICULOS SELECCIONADOS</h3>
+    <div class="ticket-item font-bold border-b-2 border-slate-300">
+        <span>Nombre</span>
+        <span>Precio</span>
+        <span>Accion</span>
+    </div>
     {#each selectedTacos as taco (taco.id)}
         <div class="ticket-item">
             <span>{taco.nombre} x {taco.cantidad}</span>
             <span>${taco.precio * taco.cantidad}</span>
-            <button on:click={() => removeFromTicket(taco.id)}>Restar</button>
+            <button class="mx-2 border-2 border-slate-200 rounded-md bg-rose-400 p-2" on:click={() => removeFromTicket(taco.id)}>Eliminar</button>
         </div>
     {/each}
     <p><strong>Total:</strong> ${total}</p>
 </div>
 
-<button on:click={confirmTicket} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">Confirmar Ticket</button>
+<button on:click={confirmTicket} class="w-96 mx-auto border-2 border-slate-200 rounded-md bg-emerald-200 p-2 mt-2">¡Realizar Compra!</button>
