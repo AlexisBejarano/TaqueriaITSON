@@ -36,12 +36,13 @@ function openModal() {
         closeModal();
     }
 
-    // Función para añadir un nuevo taco
-    async function handleAddTaco() {
+   // Función para añadir un nuevo taco
+   async function handleAddTaco() {
         await addTaco(newTaco);
         tacos = await fetchTacos(); // Recargar la lista de tacos
         newTaco = { nombre: '', precio: '', cantidad: 0 }; // Limpiar formulario
     }
+
 
     // Función para editar un taco
     function openEditTacoModal(taco) {
@@ -123,7 +124,7 @@ function openModal() {
     <p><strong>Teléfono:</strong> {taqueria.telefono}</p>
     <p><strong>Email:</strong> {taqueria.email}</p>
     <p><strong>Descripción:</strong> {taqueria.descripcion}</p>
-    <button on:click={openModal} class="font-bold border-2 border-slate-200 rounded-md bg-emerald-200 p-2 my-2">Editar Información</button>
+    <button on:click={openModal} class="border-2 border-emerald-500 rounded-md bg-emerald-200 p-2 mt-2">Editar Información</button>
 </div>
 
 <!-- Modal para editar la taquería -->
@@ -147,30 +148,30 @@ function openModal() {
     <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentTaco.precio} /></label>
     <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={currentTaco.cantidad} /></label>
     <div class="mt-4">
-        <button on:click={handleEditTacoSave} class="border-2 border-slate-200 rounded-md bg-emerald-200 p-2">Guardar</button>
-        <button on:click={() => showEditTacoModal = false} class="border-2 border-slate-200 rounded-md bg-rose-400 p-2">Cancelar</button>
+        <button on:click={handleEditTacoSave} class="border-2 border-emerald-500 rounded-md bg-emerald-200 p-1 mt-2">Guardar</button>
+        <button on:click={() => showEditTacoModal = false} class="border-2 border-rose-800 rounded-md bg-rose-400 p-1 mt-2">Cancelar</button>
     </div>
 </div>
 
 <h2 class="mt-3 text-center font-bold">ARTICULOS</h2>
 <!-- Lista de tacos disponibles -->
-<div class="caja-container">
+<div class="caja-container justify-center">
     {#each tacos as taco}
         <div class="taco-item">
             <h3>{taco.nombre}</h3>
             <p>Precio: ${taco.precio}</p>
             <p>Cantidad: {taco.cantidad}</p>
-            <button on:click={() => openEditTacoModal(taco)}>Editar</button>
-            <button on:click={() => handleDeleteTaco(taco.id)}>Eliminar</button>
+            <button class="border-2 border-emerald-500 rounded-md bg-emerald-200 p-1 mt-2" on:click={() => openEditTacoModal(taco)}>Editar</button>
+            <button class="border-2 border-rose-800 rounded-md bg-rose-400 p-1 mt-2" on:click={() => handleDeleteTaco(taco.id)}>Eliminar</button>
         </div>
     {/each}
 </div>
 
 <!-- Botón para añadir un nuevo taco -->
-<h3>Agregar Nuevo Taco</h3>
+<h3 class="text-center font-bold mt-3">AGREGAR ARTICULOS NUEVOS</h3>
 <div>
-    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={newTaco.nombre} /></label>
-    <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.precio} /></label>
-    <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.cantidad} /></label>
-    <button on:click={handleAddTaco}>Añadir Taco</button>
+    <label>Nombre: <input class="border-2 border-slate-200 rounded-md mb-2" bind:value={newTaco.nombre} /></label><br>
+    <label>Precio: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.precio} /></label><br>
+    <label>Cantidad: <input class="border-2 border-slate-200 rounded-md mb-2" type="number" bind:value={newTaco.cantidad} /></label><br>
+    <button class="border-2 border-emerald-500 rounded-md bg-emerald-200 p-2 mt-2" on:click={handleAddTaco}>Añadir Taco</button>
 </div>

@@ -132,7 +132,7 @@ async function confirmTicket() {
 <h2 class="mt-3 text-center font-bold">ARTICULOS</h2>
 
 <!-- Lista de tacos disponibles -->
-<div class="caja-container">
+<div class="caja-container justify-center">
     {#each tacos as taco}
         <div class="taco-item">
             <h3>{taco.nombre}</h3>
